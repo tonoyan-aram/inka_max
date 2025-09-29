@@ -4,7 +4,6 @@ import 'dart:convert';
 import '../models/achievement.dart';
 import '../models/gratitude_entry.dart';
 import '../constants/achievements.dart';
-import '../constants/app_constants.dart';
 
 class AchievementService {
   static final AchievementService _instance = AchievementService._internal();
@@ -12,17 +11,27 @@ class AchievementService {
   AchievementService._internal();
 
   List<Achievement> _achievements = [];
-  UserLevel _userLevel = const UserLevel(level: 1, currentXp: 0, xpToNextLevel: 100, totalXp: 0);
-  final StreamController<List<Achievement>> _achievementsController = StreamController<List<Achievement>>.broadcast();
-  final StreamController<UserLevel> _userLevelController = StreamController<UserLevel>.broadcast();
-  final StreamController<Achievement> _newAchievementController = StreamController<Achievement>.broadcast();
+  UserLevel _userLevel = const UserLevel(
+    level: 1,
+    currentXp: 0,
+    xpToNextLevel: 100,
+    totalXp: 0,
+  );
+  final StreamController<List<Achievement>> _achievementsController =
+      StreamController<List<Achievement>>.broadcast();
+  final StreamController<UserLevel> _userLevelController =
+      StreamController<UserLevel>.broadcast();
+  final StreamController<Achievement> _newAchievementController =
+      StreamController<Achievement>.broadcast();
 
   // Getters
   List<Achievement> get achievements => _achievements;
   UserLevel get userLevel => _userLevel;
-  Stream<List<Achievement>> get achievementsStream => _achievementsController.stream;
+  Stream<List<Achievement>> get achievementsStream =>
+      _achievementsController.stream;
   Stream<UserLevel> get userLevelStream => _userLevelController.stream;
-  Stream<Achievement> get newAchievementStream => _newAchievementController.stream;
+  Stream<Achievement> get newAchievementStream =>
+      _newAchievementController.stream;
 
   // Initialize the service
   Future<void> initialize() async {
@@ -36,7 +45,7 @@ class AchievementService {
       final prefs = await SharedPreferences.getInstance();
       final achievementsJson = prefs.getString('achievements') ?? '[]';
       final List<dynamic> achievementsList = json.decode(achievementsJson);
-      
+
       if (achievementsList.isEmpty) {
         // Initialize with predefined achievements
         _achievements = List.from(AchievementConstants.predefinedAchievements);
@@ -46,7 +55,7 @@ class AchievementService {
             .map((json) => Achievement.fromJson(json))
             .toList();
       }
-      
+
       _achievementsController.add(_achievements);
     } catch (e) {
       print('Error loading achievements: $e');
@@ -59,7 +68,9 @@ class AchievementService {
   Future<void> _saveAchievements() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final achievementsJson = json.encode(_achievements.map((a) => a.toJson()).toList());
+      final achievementsJson = json.encode(
+        _achievements.map((a) => a.toJson()).toList(),
+      );
       await prefs.setString('achievements', achievementsJson);
     } catch (e) {
       print('Error saving achievements: $e');
@@ -75,7 +86,12 @@ class AchievementService {
       _userLevelController.add(_userLevel);
     } catch (e) {
       print('Error loading user level: $e');
-      _userLevel = const UserLevel(level: 1, currentXp: 0, xpToNextLevel: 100, totalXp: 0);
+      _userLevel = const UserLevel(
+        level: 1,
+        currentXp: 0,
+        xpToNextLevel: 100,
+        totalXp: 0,
+      );
     }
   }
 
@@ -118,14 +134,21 @@ class AchievementService {
         case AchievementType.tag:
           if (achievement.tag != null) {
             newProgress = allEntries
-                .where((entry) => entry.tags.any((tag) => tag.name == achievement.tag))
+                .where(
+                  (entry) =>
+                      entry.tags.any((tag) => tag.name == achievement.tag),
+                )
                 .length;
             shouldUnlock = newProgress >= achievement.targetValue;
           }
           break;
 
         case AchievementType.special:
-          shouldUnlock = _checkSpecialAchievement(achievement, allEntries, newEntry);
+          shouldUnlock = _checkSpecialAchievement(
+            achievement,
+            allEntries,
+            newEntry,
+          );
           newProgress = shouldUnlock ? 1 : 0;
           break;
       }
@@ -147,7 +170,7 @@ class AchievementService {
     if (newlyUnlocked.isNotEmpty) {
       await _saveAchievements();
       _achievementsController.add(_achievements);
-      
+
       // Notify about new achievements
       for (final achievement in newlyUnlocked) {
         _newAchievementController.add(achievement);
@@ -158,7 +181,11 @@ class AchievementService {
   }
 
   // Check special achievements
-  bool _checkSpecialAchievement(Achievement achievement, List<GratitudeEntry> allEntries, GratitudeEntry? newEntry) {
+  bool _checkSpecialAchievement(
+    Achievement achievement,
+    List<GratitudeEntry> allEntries,
+    GratitudeEntry? newEntry,
+  ) {
     switch (achievement.id) {
       case 'all_tags':
         final usedTags = allEntries
@@ -188,7 +215,7 @@ class AchievementService {
   Future<void> _addXp(int xp) async {
     final newTotalXp = _userLevel.totalXp + xp;
     final newLevel = AchievementConstants.calculateUserLevel(newTotalXp);
-    
+
     _userLevel = newLevel;
     await _saveUserLevel();
     _userLevelController.add(_userLevel);
@@ -238,7 +265,9 @@ class AchievementService {
     return {
       'totalAchievements': total,
       'unlockedAchievements': unlocked.length,
-      'completionPercentage': total > 0 ? (unlocked.length / total * 100).round() : 0,
+      'completionPercentage': total > 0
+          ? (unlocked.length / total * 100).round()
+          : 0,
       'byRarity': byRarity,
       'byType': byType,
       'userLevel': _userLevel.level,
@@ -249,11 +278,16 @@ class AchievementService {
   // Reset all achievements (for testing)
   Future<void> resetAchievements() async {
     _achievements = List.from(AchievementConstants.predefinedAchievements);
-    _userLevel = const UserLevel(level: 1, currentXp: 0, xpToNextLevel: 100, totalXp: 0);
-    
+    _userLevel = const UserLevel(
+      level: 1,
+      currentXp: 0,
+      xpToNextLevel: 100,
+      totalXp: 0,
+    );
+
     await _saveAchievements();
     await _saveUserLevel();
-    
+
     _achievementsController.add(_achievements);
     _userLevelController.add(_userLevel);
   }

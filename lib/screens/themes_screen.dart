@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../models/app_theme.dart';
 import '../services/theme_service.dart';
 import '../constants/predefined_themes.dart';
@@ -47,7 +46,8 @@ class _ThemesScreenState extends State<ThemesScreen>
       body: StreamBuilder<AppThemeData>(
         stream: _themeService.themeStream,
         builder: (context, themeSnapshot) {
-          final currentTheme = themeSnapshot.data ?? PredefinedThemes.lightTheme;
+          final currentTheme =
+              themeSnapshot.data ?? PredefinedThemes.lightTheme;
 
           return TabBarView(
             controller: _tabController,
@@ -65,7 +65,7 @@ class _ThemesScreenState extends State<ThemesScreen>
 
   Widget _buildAllThemesTab(AppThemeData currentTheme) {
     final themes = _themeService.getAllThemes();
-    
+
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: themes.length,
@@ -85,7 +85,7 @@ class _ThemesScreenState extends State<ThemesScreen>
 
   Widget _buildThemesByTypeTab(ThemeType type, AppThemeData currentTheme) {
     final themes = _themeService.getThemesByType(type);
-    
+
     if (themes.isEmpty) {
       return Center(
         child: Column(
@@ -129,7 +129,7 @@ class _ThemesScreenState extends State<ThemesScreen>
 
   Widget _buildSeasonalThemesTab(AppThemeData currentTheme) {
     final themes = _themeService.getSeasonalThemes();
-    
+
     if (themes.isEmpty) {
       return Center(
         child: Column(
@@ -173,16 +173,14 @@ class _ThemesScreenState extends State<ThemesScreen>
 
   void _selectTheme(AppThemeData theme) {
     _themeService.changeTheme(theme);
-    
+
     // Show confirmation
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Theme changed to ${theme.name}'),
         backgroundColor: theme.colors.primary,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }

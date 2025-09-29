@@ -2,10 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import '../models/app_theme.dart';
 import '../constants/predefined_themes.dart';
-import '../constants/app_constants.dart';
 
 class ThemeService {
   static final ThemeService _instance = ThemeService._internal();
@@ -13,7 +11,8 @@ class ThemeService {
   ThemeService._internal();
 
   AppThemeData _currentTheme = PredefinedThemes.lightTheme;
-  final StreamController<AppThemeData> _themeController = StreamController<AppThemeData>.broadcast();
+  final StreamController<AppThemeData> _themeController =
+      StreamController<AppThemeData>.broadcast();
 
   // Getters
   AppThemeData get currentTheme => _currentTheme;
@@ -29,7 +28,7 @@ class ThemeService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final themeId = prefs.getString('selected_theme_id') ?? 'light';
-      
+
       final theme = PredefinedThemes.getThemeById(themeId);
       if (theme != null) {
         _currentTheme = theme;
@@ -122,7 +121,7 @@ class ThemeService {
         onBackground: _currentTheme.colors.onBackground,
         error: _currentTheme.colors.error,
       ),
-      
+
       // AppBar theme
       appBarTheme: AppBarTheme(
         backgroundColor: _currentTheme.colors.background,
@@ -136,22 +135,21 @@ class ThemeService {
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarIconBrightness: _currentTheme.colors.background.computeLuminance() > 0.5 
-              ? Brightness.dark 
+          statusBarIconBrightness:
+              _currentTheme.colors.background.computeLuminance() > 0.5
+              ? Brightness.dark
               : Brightness.light,
         ),
       ),
-      
+
       // Card theme
       cardTheme: CardThemeData(
         color: _currentTheme.colors.surface,
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
-      
+
       // Elevated button theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -162,13 +160,10 @@ class ThemeService {
             borderRadius: BorderRadius.circular(12),
           ),
           minimumSize: const Size(double.infinity, 48),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
-      
+
       // Outlined button theme
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
@@ -178,24 +173,18 @@ class ThemeService {
             borderRadius: BorderRadius.circular(12),
           ),
           minimumSize: const Size(double.infinity, 48),
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
-      
+
       // Text button theme
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: _currentTheme.colors.primary,
-          textStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ),
-      
+
       // Input decoration theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -210,7 +199,10 @@ class ThemeService {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: _currentTheme.colors.borderFocused, width: 2),
+          borderSide: BorderSide(
+            color: _currentTheme.colors.borderFocused,
+            width: 2,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -220,11 +212,14 @@ class ThemeService {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: _currentTheme.colors.error, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
         hintStyle: TextStyle(color: _currentTheme.colors.textDisabled),
         labelStyle: TextStyle(color: _currentTheme.colors.textSecondary),
       ),
-      
+
       // Text theme
       textTheme: TextTheme(
         displayLarge: TextStyle(
@@ -303,20 +298,20 @@ class ThemeService {
           fontWeight: FontWeight.w500,
         ),
       ),
-      
+
       // Icon theme
       iconTheme: IconThemeData(
         color: _currentTheme.colors.textPrimary,
         size: 24,
       ),
-      
+
       // Floating action button theme
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: _currentTheme.colors.primary,
         foregroundColor: _currentTheme.colors.onPrimary,
         elevation: 4,
       ),
-      
+
       // Switch theme
       switchTheme: SwitchThemeData(
         thumbColor: MaterialStateProperty.resolveWith((states) {
@@ -332,14 +327,14 @@ class ThemeService {
           return _currentTheme.colors.border;
         }),
       ),
-      
+
       // Divider theme
       dividerTheme: DividerThemeData(
         color: _currentTheme.colors.border,
         thickness: 1,
         space: 1,
       ),
-      
+
       // Bottom navigation bar theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: _currentTheme.colors.background,
@@ -348,7 +343,7 @@ class ThemeService {
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
-      
+
       // Scaffold background
       scaffoldBackgroundColor: _currentTheme.colors.background,
     );
