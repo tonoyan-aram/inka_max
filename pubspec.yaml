@@ -57,6 +57,12 @@ dependencies:
   
   # JSON serialization
   json_annotation: ^4.9.0
+  
+  # HTTP requests
+  http: ^1.2.2
+  
+  # WebView
+  flutter_inappwebview: ^6.1.5
 
 dev_dependencies:
   flutter_test:
