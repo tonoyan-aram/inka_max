@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../models/gratitude_entry.dart';
 import '../services/gratitude_provider.dart';
 import '../constants/app_colors.dart';
+import '../l10n/app_localizations.dart';
 import '../widgets/insights_chart.dart';
 import '../widgets/statistics_card.dart';
 import 'add_entry_screen.dart';
@@ -19,10 +20,12 @@ class _InsightsScreenState extends State<InsightsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Gratitude Insights'),
+        title: Text(l10n.gratitudeInsights),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {
@@ -31,43 +34,43 @@ class _InsightsScreenState extends State<InsightsScreen> {
               });
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'week',
                 child: Row(
                   children: [
-                    Icon(Icons.calendar_view_week, size: 16),
-                    SizedBox(width: 8),
-                    Text('This Week'),
+                    const Icon(Icons.calendar_view_week, size: 16),
+                    const SizedBox(width: 8),
+                    Text(l10n.thisWeek),
                   ],
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'month',
                 child: Row(
                   children: [
-                    Icon(Icons.calendar_view_month, size: 16),
-                    SizedBox(width: 8),
-                    Text('This Month'),
+                    const Icon(Icons.calendar_view_month, size: 16),
+                    const SizedBox(width: 8),
+                    Text(l10n.thisMonth),
                   ],
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'year',
                 child: Row(
                   children: [
-                    Icon(Icons.calendar_today, size: 16),
-                    SizedBox(width: 8),
-                    Text('This Year'),
+                    const Icon(Icons.calendar_today, size: 16),
+                    const SizedBox(width: 8),
+                    Text(l10n.thisYear),
                   ],
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'all',
                 child: Row(
                   children: [
-                    Icon(Icons.all_inclusive, size: 16),
-                    SizedBox(width: 8),
-                    Text('All Time'),
+                    const Icon(Icons.all_inclusive, size: 16),
+                    const SizedBox(width: 8),
+                    Text(l10n.allTime),
                   ],
                 ),
               ),
@@ -109,7 +112,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                 // Tag distribution chart
                 if (tagStats.isNotEmpty) ...[
                   Text(
-                    'Tag Distribution',
+                    l10n.tagDistribution,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 16),
@@ -119,7 +122,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
 
                 // Entries over time chart
                 Text(
-                  'Entries Over Time',
+                  l10n.entriesOverTime,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 16),
@@ -148,6 +151,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
   }
 
   Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context);
+    
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -157,7 +162,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
             Icon(Icons.analytics_outlined, size: 80, color: AppColors.primary),
             const SizedBox(height: 24),
             Text(
-              'No insights yet',
+              l10n.noInsightsYet,
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w600,
@@ -181,7 +186,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                 );
               },
               icon: const Icon(Icons.add),
-              label: const Text('Add Your First Entry'),
+              label: Text(l10n.addYourFirstEntry),
             ),
           ],
         ),
@@ -190,6 +195,8 @@ class _InsightsScreenState extends State<InsightsScreen> {
   }
 
   Widget _buildPeriodSelector() {
+    final l10n = AppLocalizations.of(context);
+    
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
@@ -198,9 +205,9 @@ class _InsightsScreenState extends State<InsightsScreen> {
       ),
       child: Row(
         children: [
-          _buildPeriodButton('week', 'Week'),
-          _buildPeriodButton('month', 'Month'),
-          _buildPeriodButton('year', 'Year'),
+          _buildPeriodButton('week', l10n.week),
+          _buildPeriodButton('month', l10n.month),
+          _buildPeriodButton('year', l10n.year),
           _buildPeriodButton('all', 'All'),
         ],
       ),

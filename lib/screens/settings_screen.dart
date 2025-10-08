@@ -3,31 +3,46 @@ import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import '../services/gratitude_provider.dart';
+import '../services/locale_service.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_constants.dart';
+import '../l10n/app_localizations.dart';
+import '../widgets/language_selector.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(l10n.settings),
       ),
       body: Consumer<GratitudeProvider>(
         builder: (context, provider, child) {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              // Language section
+              _buildSectionHeader(l10n.language),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: const LanguageSelector(),
+                ),
+              ),
+              const SizedBox(height: 24),
+              
               // Visuals section
-              _buildSectionHeader('Visuals'),
+              _buildSectionHeader(l10n.visuals),
               Card(
                 child: ListTile(
                   leading: const Icon(Icons.celebration, color: AppColors.primary),
-                  title: const Text('Show confetti on save'),
-                  subtitle: const Text('Enable celebration animations when saving entries'),
+                  title: Text(l10n.showConfettiOnSave),
+                  subtitle: Text(l10n.enableCelebrationAnimations),
                   trailing: Switch(
                     value: provider.animationsEnabled,
                     onChanged: (value) {
@@ -39,21 +54,21 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Data Management section
-              _buildSectionHeader('Data Management'),
+              _buildSectionHeader(l10n.dataManagement),
               Card(
                 child: Column(
                   children: [
                     ListTile(
                       leading: const Icon(Icons.upload, color: AppColors.info),
-                      title: const Text('Export My Entries'),
-                      subtitle: const Text('Download your gratitude entries as JSON file'),
+                      title: Text(l10n.exportMyEntries),
+                      subtitle: Text(l10n.downloadEntriesAsJson),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => _exportEntries(context, provider),
                     ),
                     const Divider(height: 1),
                     ListTile(
                       leading: const Icon(Icons.delete_forever, color: AppColors.error),
-                      title: const Text('Reset All Data'),
+                      title: Text(l10n.deleteAllData),
                       subtitle: const Text('Permanently delete all your gratitude entries'),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () => _showResetDialog(context, provider),
@@ -64,7 +79,7 @@ class SettingsScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               // App Info section
-              _buildSectionHeader('App Info'),
+              _buildSectionHeader(l10n.about),
               Card(
                 child: Column(
                   children: [

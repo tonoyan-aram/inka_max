@@ -35,7 +35,7 @@ class ThemeService {
         _themeController.add(_currentTheme);
       }
     } catch (e) {
-      print('Error loading theme: $e');
+      debugPrint('Error loading theme: $e');
       _currentTheme = PredefinedThemes.lightTheme;
       _themeController.add(_currentTheme);
     }
@@ -47,7 +47,7 @@ class ThemeService {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('selected_theme_id', _currentTheme.id);
     } catch (e) {
-      print('Error saving theme: $e');
+      debugPrint('Error saving theme: $e');
     }
   }
 

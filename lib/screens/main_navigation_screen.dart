@@ -4,6 +4,7 @@ import '../services/gratitude_provider.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_constants.dart';
 import '../widgets/achievement_notification.dart';
+import '../l10n/app_localizations.dart';
 import 'add_entry_screen.dart';
 import 'nest_screen.dart';
 import 'insights_screen.dart';
@@ -32,10 +33,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: AppColors.background,
-      drawer: _buildDrawer(),
+      drawer: _buildDrawer(l10n),
       body: Stack(
         children: [
           IndexedStack(index: _currentIndex, children: _screens),
@@ -66,20 +69,20 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         backgroundColor: AppColors.background,
         selectedItemColor: AppColors.primary,
         unselectedItemColor: AppColors.textSecondary,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.today), label: 'Today'),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Nest'),
+        items: [
+          BottomNavigationBarItem(icon: const Icon(Icons.today), label: l10n.today),
+          BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.nest),
           BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: 'Insights',
+            icon: const Icon(Icons.analytics),
+            label: l10n.insights,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.emoji_events),
-            label: 'Achievements',
+            icon: const Icon(Icons.emoji_events),
+            label: l10n.achievements,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: const Icon(Icons.settings),
+            label: l10n.settings,
           ),
         ],
       ),
@@ -99,7 +102,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     );
   }
 
-  Widget _buildDrawer() {
+  Widget _buildDrawer(AppLocalizations l10n) {
     return Drawer(
       child: Column(
         children: [
@@ -124,7 +127,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      AppConstants.appName,
+                      l10n.appName,
                       style: const TextStyle(
                         color: AppColors.onPrimary,
                         fontSize: 16,
@@ -133,7 +136,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      AppConstants.appMotto,
+                      l10n.appMotto,
                       style: const TextStyle(
                         color: AppColors.onPrimary,
                         fontSize: 10,
@@ -153,8 +156,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               children: [
                 _buildDrawerItem(
                   icon: Icons.today,
-                  title: 'Today',
-                  subtitle: 'Add your daily gratitude',
+                  title: l10n.today,
+                  subtitle: l10n.addDailyGratitude,
                   onTap: () {
                     setState(() {
                       _currentIndex = 0;
@@ -164,8 +167,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 ),
                 _buildDrawerItem(
                   icon: Icons.home,
-                  title: 'Nest',
-                  subtitle: 'View all your entries',
+                  title: l10n.nest,
+                  subtitle: l10n.viewAllEntries,
                   onTap: () {
                     setState(() {
                       _currentIndex = 1;
@@ -175,8 +178,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 ),
                 _buildDrawerItem(
                   icon: Icons.analytics,
-                  title: 'Insights',
-                  subtitle: 'See your progress',
+                  title: l10n.insights,
+                  subtitle: l10n.seeYourProgress,
                   onTap: () {
                     setState(() {
                       _currentIndex = 2;
@@ -186,8 +189,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 ),
                 _buildDrawerItem(
                   icon: Icons.emoji_events,
-                  title: 'Achievements',
-                  subtitle: 'Unlock rewards and badges',
+                  title: l10n.achievements,
+                  subtitle: l10n.unlockRewardsBadges,
                   onTap: () {
                     setState(() {
                       _currentIndex = 3;
@@ -197,8 +200,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 ),
                 _buildDrawerItem(
                   icon: Icons.palette,
-                  title: 'Themes',
-                  subtitle: 'Customize your experience',
+                  title: l10n.themes,
+                  subtitle: l10n.customizeExperience,
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).push(
@@ -210,8 +213,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 ),
                 _buildDrawerItem(
                   icon: Icons.settings,
-                  title: 'Settings',
-                  subtitle: 'App preferences',
+                  title: l10n.settings,
+                  subtitle: l10n.appPreferences,
                   onTap: () {
                     setState(() {
                       _currentIndex = 4;
@@ -222,8 +225,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 const Divider(),
                 _buildDrawerItem(
                   icon: Icons.info,
-                  title: 'About',
-                  subtitle: 'Learn more about the app',
+                  title: l10n.about,
+                  subtitle: l10n.learnMoreAboutApp,
                   onTap: () {
                     Navigator.of(context).pop();
                     _showAboutDialog();
@@ -295,10 +298,12 @@ class TodayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Today'),
+        title: Text(l10n.today),
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(Icons.menu),
@@ -326,14 +331,14 @@ class TodayScreen extends StatelessWidget {
               children: [
                 // Header
                 Text(
-                  'What are you grateful for today?',
+                  l10n.whatAreYouGratefulFor,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  _getFormattedDate(),
+                  _getFormattedDate(context),
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w600,
@@ -416,7 +421,7 @@ class TodayScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 24),
                           Text(
-                            'Your nest is empty',
+                            l10n.emptyNest,
                             style: Theme.of(context).textTheme.headlineMedium
                                 ?.copyWith(
                                   color: AppColors.textPrimary,
@@ -527,22 +532,9 @@ class TodayScreen extends StatelessWidget {
     );
   }
 
-  String _getFormattedDate() {
+  String _getFormattedDate(BuildContext context) {
     final now = DateTime.now();
-    final months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    return '${now.day} ${months[now.month - 1]} ${now.year}';
+    final l10n = AppLocalizations.of(context);
+    return '${now.day} ${l10n.getMonthName(now.month)} ${now.year}';
   }
 }

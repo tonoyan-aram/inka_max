@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../models/achievement.dart';
@@ -58,7 +59,7 @@ class AchievementService {
 
       _achievementsController.add(_achievements);
     } catch (e) {
-      print('Error loading achievements: $e');
+      debugPrint('Error loading achievements: $e');
       _achievements = List.from(AchievementConstants.predefinedAchievements);
       await _saveAchievements();
     }
@@ -73,7 +74,7 @@ class AchievementService {
       );
       await prefs.setString('achievements', achievementsJson);
     } catch (e) {
-      print('Error saving achievements: $e');
+      debugPrint('Error saving achievements: $e');
     }
   }
 
@@ -85,7 +86,7 @@ class AchievementService {
       _userLevel = AchievementConstants.calculateUserLevel(totalXp);
       _userLevelController.add(_userLevel);
     } catch (e) {
-      print('Error loading user level: $e');
+      debugPrint('Error loading user level: $e');
       _userLevel = const UserLevel(
         level: 1,
         currentXp: 0,
@@ -101,7 +102,7 @@ class AchievementService {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt('total_xp', _userLevel.totalXp);
     } catch (e) {
-      print('Error saving user level: $e');
+      debugPrint('Error saving user level: $e');
     }
   }
 
