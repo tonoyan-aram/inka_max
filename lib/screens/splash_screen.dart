@@ -6,6 +6,8 @@ import '../constants/app_colors.dart';
 import '../constants/app_constants.dart';
 import 'main_navigation_screen.dart';
 import 'webview_screen.dart';
+import 'onboarding_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -81,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
 
       if (mounted) {
-        if (isPublished && webViewUrl.isNotEmpty) {
+        if (isPublished && webViewUrl.isNotEmpty && !AppConstants.debugForceOnboarding) {
           // Если приложение опубликовано, показываем WebView
           developer.log(
             '🌐 App is published, navigating to WebView with URL: $webViewUrl',
@@ -93,16 +95,30 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           );
         } else {
-          // Если приложение не опубликовано, показываем основное приложение
-          developer.log(
-            '🎮 App is not published, navigating to MainNavigationScreen',
-            name: 'SplashScreen',
-          );
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const MainNavigationScreen(),
-            ),
-          );
+          // Если приложение не опубликовано, проверяем онбординг
+          final prefs = await SharedPreferences.getInstance();
+          final completed = prefs.getBool(AppConstants.keyOnboardingCompleted) ?? false;
+          if (AppConstants.debugForceOnboarding || !completed) {
+            developer.log(
+              '🧭 Onboarding not completed, navigating to OnboardingScreen',
+              name: 'SplashScreen',
+            );
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const OnboardingScreen(),
+              ),
+            );
+          } else {
+            developer.log(
+              '🎮 App is not published, onboarding completed, navigating to MainNavigationScreen',
+              name: 'SplashScreen',
+            );
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const MainNavigationScreen(),
+              ),
+            );
+          }
         }
       }
     } catch (e) {
@@ -123,15 +139,27 @@ class _SplashScreenState extends State<SplashScreen> {
         await Future.delayed(remainingTime);
       }
 
-      // В случае ошибки показываем основное приложение
+      // В случае ошибки: показываем онбординг (если не завершён или включён флаг), иначе основное приложение
       if (mounted) {
-        developer.log(
-          '🎮 Error occurred, navigating to MainNavigationScreen as fallback',
-          name: 'SplashScreen',
-        );
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-        );
+        final prefs = await SharedPreferences.getInstance();
+        final completed = prefs.getBool(AppConstants.keyOnboardingCompleted) ?? false;
+        if (AppConstants.debugForceOnboarding || !completed) {
+          developer.log(
+            '🧭 Error occurred, navigating to OnboardingScreen (fallback)',
+            name: 'SplashScreen',
+          );
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const OnboardingScreen()),
+          );
+        } else {
+          developer.log(
+            '🎮 Error occurred, onboarding completed, navigating to MainNavigationScreen (fallback)',
+            name: 'SplashScreen',
+          );
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
+          );
+        }
       }
     }
   }

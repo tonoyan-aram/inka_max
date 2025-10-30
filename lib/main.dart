@@ -8,12 +8,14 @@ import 'services/theme_service.dart';
 import 'services/locale_service.dart';
 import 'l10n/app_localizations.dart';
 import 'screens/splash_screen.dart';
+import 'services/appsflyer_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   await ThemeService().initialize();
   await LocaleService().initialize();
+  await AppsFlyerService().initialize();
   runApp(const InkaMaxApp());
 }
 

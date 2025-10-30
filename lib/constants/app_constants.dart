@@ -14,6 +14,10 @@ class AppConstants {
   static const String keyFirstLaunch = 'first_launch';
   static const String keyStreakCount = 'streak_count';
   static const String keyLastEntryDate = 'last_entry_date';
+  static const String keyOnboardingCompleted = 'onboarding_completed';
+
+  // Debug flags
+  static const bool debugForceOnboarding = true; // set to false for production
   
   // Animation durations
   static const Duration shortAnimation = Duration(milliseconds: 300);
@@ -34,4 +38,8 @@ class AppConstants {
   // Export
   static const String exportFileName = 'gratitude_entries_export.json';
   static const String exportDateFormat = 'yyyy-MM-dd_HH-mm-ss';
+
+  // AppsFlyer (set your real keys in secure storage/build env)
+  static const String appsFlyerDevKey = '2Tbaxm8HrTqQvvYi3k2SjZ';
+  static const String appsFlyerAppId = 'id6753169141';
 }

@@ -62,5 +62,7 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+    <key>NSUserTrackingUsageDescription</key>
+    <string>We use your device identifier to deliver better ad experiences and measure marketing performance.</string>
 </dict>
 </plist>
